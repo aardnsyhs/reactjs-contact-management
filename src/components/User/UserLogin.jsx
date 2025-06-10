@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocalStorage } from "react-use";
 import { userLogin } from "../lib/api/UserApi";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { alertError } from "../lib/alert";
 
 export default function UserLogin() {
@@ -98,12 +98,12 @@ export default function UserLogin() {
         </div>
         <div className="text-center text-sm text-gray-400">
           Don't have an account?{" "}
-          <a
-            href="register.html"
+          <Link
+            to="/register"
             className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
           >
             Sign up
-          </a>
+          </Link>
         </div>
       </form>
     </div>
