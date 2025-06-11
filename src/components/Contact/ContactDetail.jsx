@@ -96,7 +96,10 @@ export default function ContactDetail() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="bg-gray-700 bg-opacity-50 p-5 rounded-lg border-2 border-dashed border-gray-600 shadow-md card-hover">
-                <a href="#" className="block h-full">
+                <Link
+                  to={`/dashboard/contacts/${id}/addresses/create`}
+                  className="block h-full"
+                >
                   <div className="flex flex-col items-center justify-center h-full text-center py-4">
                     <div className="w-16 h-16 bg-gradient rounded-full flex items-center justify-center mb-4 shadow-lg transform transition-transform duration-300 hover:scale-110">
                       <i className="fas fa-plus text-2xl text-white" />
@@ -105,7 +108,7 @@ export default function ContactDetail() {
                       Add Address
                     </h4>
                   </div>
-                </a>
+                </Link>
               </div>
               <div className="bg-gray-700 bg-opacity-50 p-5 rounded-lg shadow-md border border-gray-600 card-hover">
                 <div className="flex items-center mb-3">
