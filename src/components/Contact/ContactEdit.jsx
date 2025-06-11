@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { useLocalStorage } from "react-use";
-import { contactCreate } from "../lib/api/ContactApi";
+import { Link, useParams } from "react-router";
+import { useEffectOnce, useLocalStorage } from "react-use";
+import { contactDetail, contactUpdate } from "../lib/api/ContactApi";
 import { alertError, alertSuccess } from "../lib/alert";
+import { useState } from "react";
 import ContactForm from "./ContactForm";
 
-export default function ContactCreate() {
+export default function ContactEdit() {
   const [token, _] = useLocalStorage("token", "");
-  const navigate = useNavigate();
+  const { id } = useParams();
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -15,18 +15,13 @@ export default function ContactCreate() {
     phone: "",
   });
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-
+  async function fetchContact() {
     try {
-      const response = await contactCreate(token, formData);
+      const response = await contactDetail(token, id);
       const responseBody = await response.json();
 
       if (response.status === 200) {
-        await alertSuccess("Contact created successfully");
-        await navigate({
-          pathname: "/dashboard/contacts",
-        });
+        setFormData(responseBody.data);
       } else {
         await alertError(responseBody.errors);
       }
@@ -35,6 +30,29 @@ export default function ContactCreate() {
       await alertError("Something went wrong. Please try again.");
     }
   }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    try {
+      const response = await contactUpdate(token, formData);
+      const responseBody = await response.json();
+
+      if (response.status === 200) {
+        setFormData(responseBody.data);
+        await alertSuccess("Contact updated successfully");
+      } else {
+        await alertError(responseBody.errors);
+      }
+    } catch (err) {
+      console.error(err);
+      await alertError("Something went wrong. Please try again.");
+    }
+  }
+
+  useEffectOnce(() => {
+    fetchContact();
+  });
 
   return (
     <div>
@@ -46,8 +64,7 @@ export default function ContactCreate() {
           <i className="fas fa-arrow-left mr-2" /> Back to Contacts
         </Link>
         <h1 className="text-2xl font-bold text-white flex items-center">
-          <i className="fas fa-user-plus text-blue-400 mr-3" /> Create New
-          Contact
+          <i className="fas fa-user-edit text-blue-400 mr-3" /> Edit Contact
         </h1>
       </div>
       <div className="bg-gray-800 bg-opacity-80 rounded-xl shadow-custom border border-gray-700 overflow-hidden max-w-2xl mx-auto animate-fade-in">
