@@ -1,6 +1,6 @@
 import { useEffectOnce, useLocalStorage } from "react-use";
 import AddressForm from "./AddressForm";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useRef, useState } from "react";
 import { addressDetail, addressUpdate } from "../lib/api/AddressApi";
 import { alertError, alertSuccess } from "../lib/alert";
@@ -9,7 +9,6 @@ import { contactDetail } from "../lib/api/ContactApi";
 export default function AddressEdit() {
   const [token, _] = useLocalStorage("token", "");
   const { id, addressId } = useParams();
-  const navigate = useNavigate();
   const [contact, setContact] = useState({});
   const [formData, setFormData] = useState({});
   const currentData = useRef({});
@@ -78,11 +77,8 @@ export default function AddressEdit() {
 
       if (response.status === 200) {
         setFormData(responseBody.data);
-        currentData(responseBody.data);
+        currentData.current = responseBody.data;
         await alertSuccess("Address updated successfully");
-        await navigate({
-          pathname: `/dashboard/contacts/${id}`,
-        });
       } else {
         await alertError(responseBody.errors);
       }
