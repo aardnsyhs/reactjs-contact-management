@@ -1,23 +1,11 @@
-export const userRegister = async ({ username, name, password }) => {
-  return await fetch(`${import.meta.env.VITE_API_PATH}/users`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ username, name, password }),
-  });
+import api from "./axios";
+
+export const userRegister = async (payload) => {
+  return await api.post("/users", payload);
 };
 
-export const userLogin = async ({ username, password }) => {
-  return await fetch(`${import.meta.env.VITE_API_PATH}/users/login`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ username, password }),
-  });
+export const userLogin = async (payload) => {
+  return await api.post("/users/login", payload);
 };
 
 export const userDetail = async (token) => {

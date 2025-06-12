@@ -20,7 +20,6 @@ export default function UserRegister() {
 
     try {
       const response = await userRegister({ username, password, name });
-      const responseBody = await response.json();
 
       if (response.status === 200) {
         await alertSuccess("User created successfully");
@@ -28,11 +27,15 @@ export default function UserRegister() {
           pathname: "/login",
         });
       } else {
-        await alertError(responseBody.errors);
+        await alertError(response.data.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response && err.response.data && err.response.data.errors) {
+        await alertError(err.response.data.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     }
   }
 

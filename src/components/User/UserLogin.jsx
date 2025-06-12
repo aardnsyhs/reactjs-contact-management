@@ -15,20 +15,23 @@ export default function UserLogin() {
 
     try {
       const response = await userLogin({ username, password });
-      const responseBody = await response.json();
 
       if (response.status === 200) {
-        const token = responseBody.data.token;
+        const token = response.data.data.token;
         setToken(token);
-        await navigate({
+        navigate({
           pathname: "/dashboard/contacts",
         });
       } else {
-        await alertError(responseBody.errors);
+        await alertError(response.data.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response && err.response.data && err.response.data.errors) {
+        await alertError(err.response.data.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     }
   }
 
