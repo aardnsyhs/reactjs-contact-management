@@ -2,37 +2,60 @@ import { Link, useParams } from "react-router";
 import { useEffectOnce, useLocalStorage } from "react-use";
 import { contactDetail, contactUpdate } from "../lib/api/ContactApi";
 import { alertError, alertSuccess } from "../lib/alert";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ContactForm from "./ContactForm";
 
 export default function ContactEdit() {
   const [token, _] = useLocalStorage("token", "");
   const { id } = useParams();
-  const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone: "",
-  });
+  const [formData, setFormData] = useState({});
+  const currentData = useRef({});
+  const [isLoading, setIsLoading] = useState(false);
 
   async function fetchContact() {
+    setIsLoading(true);
+
     try {
       const response = await contactDetail(token, id);
       const responseBody = await response.json();
 
       if (response.status === 200) {
         setFormData(responseBody.data);
+        currentData.current = responseBody.data;
       } else {
         await alertError(responseBody.errors);
       }
     } catch (err) {
       console.error(err);
       await alertError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
+  }
+
+  function isFormChanged() {
+    const current = currentData.current;
+    return Object.keys(formData).some((key) => {
+      const currentVal = current[key];
+      const newVal = formData[key];
+
+      if (typeof newVal === "string" && typeof currentVal === "string") {
+        return newVal.trim() !== currentVal.trim();
+      }
+
+      return newVal !== currentVal;
+    });
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setIsLoading(true);
+
+    if (!isFormChanged()) {
+      await alertError("No changes detected");
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const response = await contactUpdate(token, formData);
@@ -40,6 +63,7 @@ export default function ContactEdit() {
 
       if (response.status === 200) {
         setFormData(responseBody.data);
+        currentData.current = responseBody.data;
         await alertSuccess("Contact updated successfully");
       } else {
         await alertError(responseBody.errors);
@@ -47,6 +71,8 @@ export default function ContactEdit() {
     } catch (err) {
       console.error(err);
       await alertError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -74,6 +100,7 @@ export default function ContactEdit() {
             setFormData={setFormData}
             onSubmit={handleSubmit}
             isEdit
+            isLoading={isLoading}
           />
         </div>
       </div>

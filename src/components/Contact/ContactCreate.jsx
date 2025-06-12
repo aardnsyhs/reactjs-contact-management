@@ -8,15 +8,12 @@ import ContactForm from "./ContactForm";
 export default function ContactCreate() {
   const [token, _] = useLocalStorage("token", "");
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone: "",
-  });
+  const [formData, setFormData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await contactCreate(token, formData);
@@ -33,6 +30,8 @@ export default function ContactCreate() {
     } catch (err) {
       console.error(err);
       await alertError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -56,6 +55,7 @@ export default function ContactCreate() {
             formData={formData}
             setFormData={setFormData}
             onSubmit={handleSubmit}
+            isLoading={isLoading}
           />
         </div>
       </div>

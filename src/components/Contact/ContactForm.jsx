@@ -5,6 +5,7 @@ export default function ContactForm({
   setFormData,
   onSubmit,
   isEdit = false,
+  isLoading = false,
 }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -70,10 +71,26 @@ export default function ContactForm({
         </Link>
         <button
           type="submit"
-          className="px-5 py-3 bg-gradient text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform hover:-translate-y-0.5 flex items-center"
+          disabled={isLoading}
+          className={`px-5 py-3 bg-gradient text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform hover:-translate-y-0.5 flex items-center ${
+            isLoading
+              ? "opacity-60 cursor-not-allowed"
+              : "hover:opacity-90 hover:-translate-y-0.5"
+          }`}
         >
-          <i className={`fas ${isEdit ? "fa-save" : "fa-plus-circle"} mr-2`} />
-          {isEdit ? "Save Changes" : "Create Contact"}
+          {isLoading ? (
+            <>
+              <i className="fas fa-spinner fa-spin mr-2" />
+              {isEdit ? "Updating..." : "Saving..."}
+            </>
+          ) : (
+            <>
+              <i
+                className={`fas ${isEdit ? "fa-save" : "fa-plus-circle"} mr-2`}
+              />
+              {isEdit ? "Save Changes" : "Create Contact"}
+            </>
+          )}
         </button>
       </div>
     </form>
