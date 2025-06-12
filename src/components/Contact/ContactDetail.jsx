@@ -6,14 +6,18 @@ import { alertConfirm, alertError, alertSuccess } from "../lib/alert";
 import { addressDelete, addressList } from "../lib/api/AddressApi";
 import AddressList from "../Address/AddressList";
 import ContactInfo from "./ContactInfo";
+import AddressCardSkeleton from "../Address/AddressCardSkeleton";
 
 export default function ContactDetail() {
   const [token, _] = useLocalStorage("token", "");
   const { id } = useParams();
   const [contact, setContact] = useState({});
   const [addresses, setAddresses] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function fetchContact() {
+    setIsLoading(true);
+
     try {
       const response = await contactDetail(token, id);
       const responseBody = await response.json();
@@ -26,10 +30,14 @@ export default function ContactDetail() {
     } catch (err) {
       console.error(err);
       await alertError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
   async function fetchAddresses() {
+    setIsLoading(true);
+
     try {
       const response = await addressList(token, id);
       const responseBody = await response.json();
@@ -42,6 +50,8 @@ export default function ContactDetail() {
     } catch (err) {
       console.error(err);
       await alertError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -111,9 +121,13 @@ export default function ContactDetail() {
                   </div>
                 </Link>
               </div>
-              {addresses.map((address) => (
-                <AddressList address={address} onDelete={handleDelete} />
-              ))}
+              {isLoading ? (
+                <AddressCardSkeleton />
+              ) : (
+                addresses.map((address) => (
+                  <AddressList address={address} onDelete={handleDelete} />
+                ))
+              )}
             </div>
           </div>
           <div className="flex justify-end space-x-4">
