@@ -17,19 +17,24 @@ export default function UserProfile() {
 
   async function fetchUserDetail() {
     setIsLoading(true);
+
     try {
       const response = await userDetail(token);
-      const responseBody = await response.json();
+      const responseBody = await response.data;
 
       if (response.status === 200) {
         setName(responseBody.data.name);
         currentName.current = responseBody.data.name;
       } else {
-        await alertError(responseBody.errors);
+        await alertError(response.data.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response && err.responseBody && err.responseBody.errors) {
+        await alertError(err.responseBody.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -45,17 +50,21 @@ export default function UserProfile() {
 
     try {
       const response = await userUpdateProfile(token, { name });
-      const responseBody = await response.json();
+      const responseBody = await response.data;
 
       if (response.status === 200) {
         await alertSuccess("Profile updated successfully");
         currentName.current = name;
       } else {
-        await alertError(responseBody.errors);
+        await alertError(responseBody.data.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response && err.responseBody && err.responseBody.errors) {
+        await alertError(err.responseBody.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     }
   }
 
@@ -69,18 +78,22 @@ export default function UserProfile() {
 
     try {
       const response = await userUpdatePassword(token, { password });
-      const responseBody = await response.json();
+      const responseBody = await response.data;
 
       if (response.status === 200) {
         setPassword("");
         setConfirmPassword("");
         await alertSuccess("Password updated successfully");
       } else {
-        await alertError(responseBody.errors);
+        await alertError(responseBody.data.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response && err.responseBody && err.responseBody.errors) {
+        await alertError(err.responseBody.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     }
   }
 

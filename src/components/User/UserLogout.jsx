@@ -15,20 +15,21 @@ export default function UserLogout() {
 
     try {
       const response = await userLogout(token);
-      const responseBody = await response.json();
 
       if (response.status === 200) {
         setToken("");
         navigate("/login");
-      } else if (response.status === 401) {
-        setToken("");
-        navigate("/login");
-      } else {
-        await alertError(responseBody.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response?.status === 401) {
+        setToken("");
+        navigate("/login");
+      } else if (err.response?.data?.errors) {
+        await alertError(err.response.data.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     }
   }
 
