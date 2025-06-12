@@ -5,6 +5,9 @@ import { useRef, useState } from "react";
 import { addressDetail, addressUpdate } from "../lib/api/AddressApi";
 import { alertError, alertSuccess } from "../lib/alert";
 import { contactDetail } from "../lib/api/ContactApi";
+import AddressHeader from "./AddressHeader";
+import AddressHeaderSkeleton from "./AddressHeaderSkeleton";
+import AddressFormSkeleton from "./AddressFormSkeleton";
 
 export default function AddressEdit() {
   const [token, _] = useLocalStorage("token", "");
@@ -15,6 +18,8 @@ export default function AddressEdit() {
   const [isLoading, setIsLoading] = useState(false);
 
   async function fetchContact() {
+    setIsLoading(true);
+
     try {
       const response = await contactDetail(token, id);
       const responseBody = await response.json();
@@ -27,10 +32,14 @@ export default function AddressEdit() {
     } catch (err) {
       console.error(err);
       await alertError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
   async function fetchAddress() {
+    setIsLoading(true);
+
     try {
       const response = await addressDetail(token, id, addressId);
       const responseBody = await response.json();
@@ -44,6 +53,8 @@ export default function AddressEdit() {
     } catch (err) {
       console.error(err);
       await alertError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -111,28 +122,23 @@ export default function AddressEdit() {
       </div>
       <div className="bg-gray-800 bg-opacity-80 rounded-xl shadow-custom border border-gray-700 overflow-hidden max-w-2xl mx-auto animate-fade-in">
         <div className="p-8">
-          <div className="mb-6 pb-6 border-b border-gray-700">
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4 shadow-md">
-                <i className="fas fa-user text-white" />
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-white">
-                  {contact.first_name} {contact.last_name}
-                </h2>
-                <p className="text-gray-300 text-sm">
-                  {contact.email} • {contact.phone}
-                </p>
-              </div>
-            </div>
-          </div>
-          <AddressForm
-            formData={formData}
-            setFormData={setFormData}
-            onSubmit={handleSubmit}
-            isEdit
-            isLoading={isLoading}
-          />
+          {isLoading ? (
+            <>
+              <AddressHeaderSkeleton />
+              <AddressFormSkeleton />
+            </>
+          ) : (
+            <>
+              <AddressHeader contact={contact} />
+              <AddressForm
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={handleSubmit}
+                isEdit
+                isLoading={isLoading}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>
