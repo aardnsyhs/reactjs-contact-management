@@ -5,6 +5,7 @@ export default function AddressForm({
   setFormData,
   onSubmit,
   isEdit = false,
+  isLoading = false,
 }) {
   const { id } = useParams();
   const handleChange = (e) => {
@@ -135,10 +136,26 @@ export default function AddressForm({
         </Link>
         <button
           type="submit"
-          className="px-5 py-3 bg-gradient text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform hover:-translate-y-0.5 flex items-center"
+          disabled={isLoading}
+          className={`px-5 py-3 bg-gradient text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform hover:-translate-y-0.5 flex items-center ${
+            isLoading
+              ? "opacity-60 cursor-not-allowed"
+              : "hover:opacity-90 hover:-translate-y-0.5"
+          }`}
         >
-          <i className={`fas ${isEdit ? "fa-save" : "fa-plus-circle"} mr-2`} />
-          {isEdit ? "Update Address" : "Add Address"}
+          {isLoading ? (
+            <>
+              <i className="fas fa-spinner fa-spin mr-2" />
+              {isEdit ? "Updating..." : "Saving..."}
+            </>
+          ) : (
+            <>
+              <i
+                className={`fas ${isEdit ? "fa-save" : "fa-plus-circle"} mr-2`}
+              />
+              {isEdit ? "Update Address" : "Add Address"}
+            </>
+          )}
         </button>
       </div>
     </form>

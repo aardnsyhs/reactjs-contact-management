@@ -73,6 +73,7 @@ export default function ContactEdit() {
             formData={formData}
             setFormData={setFormData}
             onSubmit={handleSubmit}
+            isEdit
           />
         </div>
       </div>

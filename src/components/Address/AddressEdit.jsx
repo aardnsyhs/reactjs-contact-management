@@ -1,17 +1,18 @@
-import { Link, useNavigate, useParams } from "react-router";
-import AddressForm from "./AddressForm";
 import { useEffectOnce, useLocalStorage } from "react-use";
-import { useState } from "react";
-import { contactDetail } from "../lib/api/ContactApi";
+import AddressForm from "./AddressForm";
+import { Link, useNavigate, useParams } from "react-router";
+import { useRef, useState } from "react";
+import { addressDetail, addressUpdate } from "../lib/api/AddressApi";
 import { alertError, alertSuccess } from "../lib/alert";
-import { addressCreate } from "../lib/api/AddressApi";
+import { contactDetail } from "../lib/api/ContactApi";
 
-export default function AddressCreate() {
+export default function AddressEdit() {
   const [token, _] = useLocalStorage("token", "");
-  const { id } = useParams();
+  const { id, addressId } = useParams();
   const navigate = useNavigate();
   const [contact, setContact] = useState({});
   const [formData, setFormData] = useState({});
+  const currentData = useRef({});
   const [isLoading, setIsLoading] = useState(false);
 
   async function fetchContact() {
@@ -30,16 +31,55 @@ export default function AddressCreate() {
     }
   }
 
+  async function fetchAddress() {
+    try {
+      const response = await addressDetail(token, id, addressId);
+      const responseBody = await response.json();
+
+      if (response.status === 200) {
+        setFormData(responseBody.data);
+        currentData.current = responseBody.data;
+      } else {
+        await alertError(responseBody.errors);
+      }
+    } catch (err) {
+      console.error(err);
+      await alertError("Something went wrong. Please try again.");
+    }
+  }
+
+  function isFormChanged() {
+    const current = currentData.current;
+    return Object.keys(formData).some((key) => {
+      const currentVal = current[key];
+      const newVal = formData[key];
+
+      if (typeof newVal === "string" && typeof currentVal === "string") {
+        return newVal.trim() !== currentVal.trim();
+      }
+
+      return newVal !== currentVal;
+    });
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
 
+    if (!isFormChanged()) {
+      await alertError("No changes detected");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await addressCreate(token, id, formData);
+      const response = await addressUpdate(token, id, addressId, formData);
       const responseBody = await response.json();
 
       if (response.status === 200) {
-        await alertSuccess("Address created successfully");
+        setFormData(responseBody.data);
+        currentData(responseBody.data);
+        await alertSuccess("Address updated successfully");
         await navigate({
           pathname: `/dashboard/contacts/${id}`,
         });
@@ -56,6 +96,7 @@ export default function AddressCreate() {
 
   useEffectOnce(() => {
     fetchContact();
+    fetchAddress();
   });
 
   return (
@@ -68,7 +109,7 @@ export default function AddressCreate() {
           <i className="fas fa-arrow-left mr-2" /> Back to Contact Details
         </Link>
         <h1 className="text-2xl font-bold text-white flex items-center">
-          <i className="fas fa-plus-circle text-blue-400 mr-3" /> Add New
+          <i className="fas fa-map-marker-alt text-blue-400 mr-3" /> Edit
           Address
         </h1>
       </div>
@@ -93,6 +134,7 @@ export default function AddressCreate() {
             formData={formData}
             setFormData={setFormData}
             onSubmit={handleSubmit}
+            isEdit
             isLoading={isLoading}
           />
         </div>

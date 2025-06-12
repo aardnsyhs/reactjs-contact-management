@@ -29,3 +29,36 @@ export const addressList = async (token, id) => {
     }
   );
 };
+
+export const addressDetail = async (token, id, idAddress) => {
+  return await fetch(
+    `${import.meta.env.VITE_API_PATH}/contacts/${id}/addresses/${idAddress}`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: token,
+      },
+    }
+  );
+};
+
+export const addressUpdate = async (
+  token,
+  id,
+  idAddress,
+  { street, city, province, country, postal_code }
+) => {
+  return await fetch(
+    `${import.meta.env.VITE_API_PATH}/contacts/${id}/addresses/${idAddress}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify({ street, city, province, country, postal_code }),
+    }
+  );
+};
