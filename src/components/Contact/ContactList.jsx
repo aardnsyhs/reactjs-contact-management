@@ -6,6 +6,7 @@ import { Link } from "react-router";
 import ContactSearch from "./ContactSearch";
 import ContactCard from "./ContactCard";
 import Pagination from "./Pagination";
+import ContactCardSkeleton from "./ContactCardSkeleton";
 
 export default function ContactList() {
   const [token] = useLocalStorage("token", "");
@@ -15,9 +16,12 @@ export default function ContactList() {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [contacts, setContacts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [reload, setReload] = useState(false);
 
   async function fetchContacts() {
+    setIsLoading(true);
+
     try {
       const response = await contactList(token, { name, email, phone, page });
       const responseBody = await response.json();
@@ -31,6 +35,8 @@ export default function ContactList() {
     } catch (err) {
       console.error(err);
       await alertError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -98,13 +104,15 @@ export default function ContactList() {
             </div>
           </Link>
         </div>
-        {contacts.map((contact) => (
-          <ContactCard
-            key={contact.id}
-            contact={contact}
-            onDelete={() => handleContactDelete(contact.id)}
-          />
-        ))}
+        {isLoading
+          ? [...Array(5)].map((_, i) => <ContactCardSkeleton key={i} />)
+          : contacts.map((contact) => (
+              <ContactCard
+                key={contact.id}
+                contact={contact}
+                onDelete={() => handleContactDelete(contact.id)}
+              />
+            ))}
       </div>
       <div className="mt-10 flex justify-center">
         <Pagination
