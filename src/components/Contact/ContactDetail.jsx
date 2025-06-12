@@ -7,6 +7,7 @@ import { addressDelete, addressList } from "../lib/api/AddressApi";
 import AddressList from "../Address/AddressList";
 import ContactInfo from "./ContactInfo";
 import AddressCardSkeleton from "../Address/AddressCardSkeleton";
+import ContactInfoSkeleton from "./ContactInfoSkeleton";
 
 export default function ContactDetail() {
   const [token, _] = useLocalStorage("token", "");
@@ -99,7 +100,11 @@ export default function ContactDetail() {
       </div>
       <div className="bg-gray-800 bg-opacity-80 rounded-xl shadow-custom border border-gray-700 overflow-hidden max-w-2xl mx-auto animate-fade-in">
         <div className="p-8">
-          <ContactInfo contact={contact} />
+          {isLoading ? (
+            <ContactInfoSkeleton />
+          ) : (
+            <ContactInfo contact={contact} />
+          )}
           <div className="mb-8">
             <div className="flex items-center mb-5">
               <i className="fas fa-map-marker-alt text-blue-400 mr-3" />
