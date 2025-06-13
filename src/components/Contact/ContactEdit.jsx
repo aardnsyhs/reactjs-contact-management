@@ -108,7 +108,7 @@ export default function ContactEdit() {
             formData={formData}
             setFormData={setFormData}
             onSubmit={handleSubmit}
-            isEdit
+            isEdit={true}
             isLoading={isLoading}
             isFetching={isFetching}
           />

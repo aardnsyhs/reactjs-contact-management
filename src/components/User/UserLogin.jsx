@@ -4,6 +4,7 @@ import { userLogin } from "../lib/api/UserApi";
 import { Link, useNavigate } from "react-router";
 import { alertError } from "../lib/alert";
 import LoadingScreen from "../LoadingScreen";
+import Button from "../Button";
 
 export default function UserLogin() {
   const [username, setUsername] = useState("");
@@ -100,27 +101,15 @@ export default function UserLogin() {
           </div>
         </div>
         <div className="mb-6">
-          <button
+          <Button
             type="submit"
-            disabled={isLoading}
-            className={`w-full bg-gradient text-white py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform ${
-              isLoading
-                ? "opacity-60 cursor-not-allowed"
-                : "hover:opacity-90 hover:-translate-y-0.5"
-            }`}
+            icon="fa-user-plus"
+            color="gradient"
+            className="w-full px-4 py-3"
+            isLoading={isLoading}
           >
-            {isLoading ? (
-              <>
-                <i className="fas fa-spinner fa-spin mr-2" />
-                Signing...
-              </>
-            ) : (
-              <>
-                <i className="fas fa-sign-in-alt mr-2" />
-                Sign In
-              </>
-            )}
-          </button>
+            Sign In
+          </Button>
         </div>
         <div className="text-center text-sm text-gray-400">
           Don't have an account?{" "}

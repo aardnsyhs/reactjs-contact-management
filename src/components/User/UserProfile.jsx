@@ -149,22 +149,15 @@ export default function UserProfile() {
                 </div>
               </div>
               <div className="mt-6">
-                <button
+                <Button
                   type="submit"
-                  disabled={isLoading}
-                  className={`w-full bg-gradient text-white py-3 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center ${
-                    isLoading
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:opacity-90"
-                  }`}
+                  icon="fa-save"
+                  color="gradient"
+                  className="w-full"
+                  isLoading={isLoading}
                 >
-                  {isLoading ? (
-                    <i className="fas fa-spinner fa-spin mr-2" />
-                  ) : (
-                    <i className="fas fa-save mr-2" />
-                  )}
                   Update Profile
-                </button>
+                </Button>
               </div>
             </form>
           </div>
@@ -232,6 +225,7 @@ export default function UserProfile() {
                   icon="fa-key"
                   color="gradient"
                   className="w-full"
+                  isLoading={isLoading}
                 >
                   Update Password
                 </Button>

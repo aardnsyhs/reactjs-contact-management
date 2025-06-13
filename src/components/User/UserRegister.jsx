@@ -2,6 +2,7 @@ import { useState } from "react";
 import { alertError, alertSuccess } from "../lib/alert";
 import { userRegister } from "../lib/api/UserApi";
 import { Link, useNavigate } from "react-router";
+import Button from "../Button";
 
 export default function UserRegister() {
   const [username, setUsername] = useState("");
@@ -146,27 +147,15 @@ export default function UserRegister() {
           </div>
         </div>
         <div className="mb-6">
-          <button
+          <Button
             type="submit"
-            disabled={isLoading}
-            className={`w-full bg-gradient text-white py-3 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform hover:-translate-y-0.5 ${
-              isLoading
-                ? "opacity-60 cursor-not-allowed"
-                : "hover:opacity-90 hover:-translate-y-0.5"
-            }`}
+            icon="fa-user-plus"
+            color="gradient"
+            className="w-full px-4 py-3"
+            isLoading={isLoading}
           >
-            {isLoading ? (
-              <>
-                <i className="fas fa-spinner fa-spin mr-2" />
-                Registering...
-              </>
-            ) : (
-              <>
-                <i className="fas fa-user-plus mr-2" />
-                Register
-              </>
-            )}
-          </button>
+            Register
+          </Button>
         </div>
         <div className="text-center text-sm text-gray-400">
           Already have an account?{" "}

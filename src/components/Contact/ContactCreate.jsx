@@ -59,6 +59,7 @@ export default function ContactCreate() {
             formData={formData}
             setFormData={setFormData}
             onSubmit={handleSubmit}
+            isEdit={false}
             isLoading={isLoading}
           />
         </div>

@@ -102,7 +102,7 @@ export default function AddressCreate() {
                 formData={formData}
                 setFormData={setFormData}
                 onSubmit={handleSubmit}
-                isEdit
+                isEdit={false}
                 isLoading={isLoading}
               />
             </>
