@@ -9,9 +9,11 @@ export default function UserRegister() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setIsLoading(true);
 
     if (password !== confirmPassword) {
       await alertError("Passwords do not match");
@@ -36,6 +38,8 @@ export default function UserRegister() {
       } else {
         await alertError("Something went wrong. Please try again.");
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -144,9 +148,24 @@ export default function UserRegister() {
         <div className="mb-6">
           <button
             type="submit"
-            className="w-full bg-gradient text-white py-3 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform hover:-translate-y-0.5"
+            disabled={isLoading}
+            className={`w-full bg-gradient text-white py-3 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform hover:-translate-y-0.5 ${
+              isLoading
+                ? "opacity-60 cursor-not-allowed"
+                : "hover:opacity-90 hover:-translate-y-0.5"
+            }`}
           >
-            <i className="fas fa-user-plus mr-2" /> Register
+            {isLoading ? (
+              <>
+                <i className="fas fa-spinner fa-spin mr-2" />
+                Registering...
+              </>
+            ) : (
+              <>
+                <i className="fas fa-user-plus mr-2" />
+                Register
+              </>
+            )}
           </button>
         </div>
         <div className="text-center text-sm text-gray-400">
@@ -155,7 +174,7 @@ export default function UserRegister() {
             to="/login"
             className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
           >
-            Sign in
+            Sign In
           </Link>
         </div>
       </form>
