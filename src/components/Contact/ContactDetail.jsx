@@ -45,16 +45,20 @@ export default function ContactDetail() {
 
     try {
       const response = await addressList(token, id);
-      const responseBody = await response.json();
+      const responseBody = await response.data;
 
       if (response.status === 200) {
         setAddresses(responseBody.data);
       } else {
-        await alertError(responseBody.errors);
+        await alertError(responseBody.data.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response && err.response.data && err.response.data.errors) {
+        await alertError(err.response.data.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -69,18 +73,21 @@ export default function ContactDetail() {
 
     try {
       const response = await addressDelete(token, id, addressId);
-      const responseBody = await response.json();
-      console.log(responseBody);
+      const responseBody = await response.data;
 
       if (response.status === 200) {
         await fetchAddresses();
         await alertSuccess("Address deleted successfully");
       } else {
-        await alertError(responseBody.errors);
+        await alertError(responseBody.data.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response && err.response.data && err.response.data.errors) {
+        await alertError(err.response.data.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     }
   }
 

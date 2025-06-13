@@ -1,77 +1,41 @@
-export const addressCreate = async (
-  token,
-  id,
-  { street, city, province, country, postal_code }
-) => {
-  return await fetch(
-    `${import.meta.env.VITE_API_PATH}/contacts/${id}/addresses`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: token,
-      },
-      body: JSON.stringify({ street, city, province, country, postal_code }),
-    }
-  );
+import api from "./axios";
+
+export const addressCreate = async (token, id, payload) => {
+  return await api.post(`/contacts/${id}/addresses`, payload, {
+    headers: {
+      Authorization: token,
+    },
+  });
 };
 
 export const addressList = async (token, id) => {
-  return await fetch(
-    `${import.meta.env.VITE_API_PATH}/contacts/${id}/addresses`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: token,
-      },
-    }
-  );
+  return await api.get(`/contacts/${id}/addresses`, {
+    headers: {
+      Authorization: token,
+    },
+  });
 };
 
 export const addressDetail = async (token, id, idAddress) => {
-  return await fetch(
-    `${import.meta.env.VITE_API_PATH}/contacts/${id}/addresses/${idAddress}`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: token,
-      },
-    }
-  );
+  return await api.get(`/contacts/${id}/addresses/${idAddress}`, {
+    headers: {
+      Authorization: token,
+    },
+  });
 };
 
-export const addressUpdate = async (
-  token,
-  id,
-  idAddress,
-  { street, city, province, country, postal_code }
-) => {
-  return await fetch(
-    `${import.meta.env.VITE_API_PATH}/contacts/${id}/addresses/${idAddress}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: token,
-      },
-      body: JSON.stringify({ street, city, province, country, postal_code }),
-    }
-  );
+export const addressUpdate = async (token, id, idAddress, payload) => {
+  return await api.put(`/contacts/${id}/addresses/${idAddress}`, payload, {
+    headers: {
+      Authorization: token,
+    },
+  });
 };
 
 export const addressDelete = async (token, id, idAddress) => {
-  return await fetch(
-    `${import.meta.env.VITE_API_PATH}/contacts/${id}/addresses/${idAddress}`,
-    {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        Authorization: token,
-      },
-    }
-  );
+  return await api.delete(`/contacts/${id}/addresses/${idAddress}`, {
+    headers: {
+      Authorization: token,
+    },
+  });
 };
