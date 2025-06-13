@@ -141,7 +141,11 @@ export default function ContactDetail() {
                 <AddressCardSkeleton />
               ) : (
                 addresses.map((address) => (
-                  <AddressList address={address} onDelete={handleDelete} />
+                  <AddressList
+                    key={address.id}
+                    address={address}
+                    onDelete={handleDelete}
+                  />
                 ))
               )}
             </div>

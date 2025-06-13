@@ -4,10 +4,7 @@ export default function AddressList({ address, onDelete }) {
   const { id } = useParams();
 
   return (
-    <div
-      key={address.id}
-      className="bg-gray-700 bg-opacity-50 p-5 rounded-lg shadow-md border border-gray-600 card-hover"
-    >
+    <div className="bg-gray-700 bg-opacity-50 p-5 rounded-lg shadow-md border border-gray-600 card-hover">
       <div className="flex items-center mb-3">
         <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3 shadow-md">
           <i className="fas fa-home text-white" />
