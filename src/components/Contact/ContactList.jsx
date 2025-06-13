@@ -24,17 +24,21 @@ export default function ContactList() {
 
     try {
       const response = await contactList(token, { name, email, phone, page });
-      const responseBody = await response.json();
+      const responseBody = await response.data;
 
       if (response.status === 200) {
         setContacts(responseBody.data);
         setTotalPage(responseBody.paging.total_page);
       } else {
-        await alertError(responseBody.errors);
+        await alertError(responseBody.data.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response && err.response.data && err.response.data.errors) {
+        await alertError(err.response.data.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -57,17 +61,21 @@ export default function ContactList() {
 
     try {
       const response = await contactDelete(token, id);
-      const responseBody = await response.json();
+      const responseBody = await response.data;
 
       if (response.status === 200) {
         setReload(!reload);
         await alertSuccess("Contact deleted successfully");
       } else {
-        await alertError(responseBody.errors);
+        await alertError(responseBody.data.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response && err.response.data && err.response.data.errors) {
+        await alertError(err.response.data.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     }
   }
 

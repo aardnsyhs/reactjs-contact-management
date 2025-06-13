@@ -17,17 +17,21 @@ export default function ContactEdit() {
 
     try {
       const response = await contactDetail(token, id);
-      const responseBody = await response.json();
+      const responseBody = await response.data;
 
       if (response.status === 200) {
         setFormData(responseBody.data);
         currentData.current = responseBody.data;
       } else {
-        await alertError(responseBody.errors);
+        await alertError(responseBody.data.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response && err.response.data && err.response.data.errors) {
+        await alertError(err.response.data.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -59,18 +63,22 @@ export default function ContactEdit() {
 
     try {
       const response = await contactUpdate(token, formData);
-      const responseBody = await response.json();
+      const responseBody = await response.data;
 
       if (response.status === 200) {
         setFormData(responseBody.data);
         currentData.current = responseBody.data;
         await alertSuccess("Contact updated successfully");
       } else {
-        await alertError(responseBody.errors);
+        await alertError(responseBody.data.errors);
       }
     } catch (err) {
       console.error(err);
-      await alertError("Something went wrong. Please try again.");
+      if (err.response && err.response.data && err.response.data.errors) {
+        await alertError(err.response.data.errors);
+      } else {
+        await alertError("Something went wrong. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
