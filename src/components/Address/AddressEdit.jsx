@@ -16,9 +16,10 @@ export default function AddressEdit() {
   const [formData, setFormData] = useState({});
   const currentData = useRef({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isFething, setIsFething] = useState(false);
 
   async function fetchContact() {
-    setIsLoading(true);
+    setIsFething(true);
 
     try {
       const response = await contactDetail(token, id);
@@ -37,12 +38,12 @@ export default function AddressEdit() {
         await alertError("Something went wrong. Please try again.");
       }
     } finally {
-      setIsLoading(false);
+      setIsFething(false);
     }
   }
 
   async function fetchAddress() {
-    setIsLoading(true);
+    setIsFething(true);
 
     try {
       const response = await addressDetail(token, id, addressId);
@@ -62,7 +63,7 @@ export default function AddressEdit() {
         await alertError("Something went wrong. Please try again.");
       }
     } finally {
-      setIsLoading(false);
+      setIsFething(false);
     }
   }
 
@@ -134,7 +135,7 @@ export default function AddressEdit() {
       </div>
       <div className="bg-gray-800 bg-opacity-80 rounded-xl shadow-custom border border-gray-700 overflow-hidden max-w-2xl mx-auto animate-fade-in">
         <div className="p-8">
-          {isLoading ? (
+          {isFething ? (
             <>
               <AddressHeaderSkeleton />
               <AddressFormSkeleton />

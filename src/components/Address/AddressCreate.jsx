@@ -5,6 +5,9 @@ import { useState } from "react";
 import { contactDetail } from "../lib/api/ContactApi";
 import { alertError, alertSuccess } from "../lib/alert";
 import { addressCreate } from "../lib/api/AddressApi";
+import AddressHeader from "./AddressHeader";
+import AddressHeaderSkeleton from "./AddressHeaderSkeleton";
+import AddressFormSkeleton from "./AddressFormSkeleton";
 
 export default function AddressCreate() {
   const [token, _] = useLocalStorage("token", "");
@@ -13,8 +16,11 @@ export default function AddressCreate() {
   const [contact, setContact] = useState({});
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isFething, setIsFething] = useState(false);
 
   async function fetchContact() {
+    setIsFething(true);
+
     try {
       const response = await contactDetail(token, id);
       const responseBody = await response.data;
@@ -31,6 +37,8 @@ export default function AddressCreate() {
       } else {
         await alertError("Something went wrong. Please try again.");
       }
+    } finally {
+      setIsFething(false);
     }
   }
 
@@ -82,27 +90,23 @@ export default function AddressCreate() {
       </div>
       <div className="bg-gray-800 bg-opacity-80 rounded-xl shadow-custom border border-gray-700 overflow-hidden max-w-2xl mx-auto animate-fade-in">
         <div className="p-8">
-          <div className="mb-6 pb-6 border-b border-gray-700">
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4 shadow-md">
-                <i className="fas fa-user text-white" />
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-white">
-                  {contact.first_name} {contact.last_name}
-                </h2>
-                <p className="text-gray-300 text-sm">
-                  {contact.email} • {contact.phone}
-                </p>
-              </div>
-            </div>
-          </div>
-          <AddressForm
-            formData={formData}
-            setFormData={setFormData}
-            onSubmit={handleSubmit}
-            isLoading={isLoading}
-          />
+          {isFething ? (
+            <>
+              <AddressHeaderSkeleton />
+              <AddressFormSkeleton />
+            </>
+          ) : (
+            <>
+              <AddressHeader contact={contact} />
+              <AddressForm
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={handleSubmit}
+                isEdit
+                isLoading={isLoading}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>
