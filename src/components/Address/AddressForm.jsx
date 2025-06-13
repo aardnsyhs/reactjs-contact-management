@@ -6,12 +6,17 @@ export default function AddressForm({
   onSubmit,
   isEdit = false,
   isLoading = false,
+  isFetching = false,
 }) {
   const { id } = useParams();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const renderSkeleton = () => (
+    <div className="w-full h-[48px] bg-gray-600 animate-pulse rounded-lg" />
+  );
 
   return (
     <form onSubmit={onSubmit}>
@@ -31,19 +36,25 @@ export default function AddressForm({
             {label}
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <i className={`fas fa-${icon} text-gray-500`} />
-            </div>
-            <input
-              type="text"
-              id={name}
-              name={name}
-              value={formData[name] || ""}
-              onChange={handleChange}
-              className="w-full pl-10 pr-3 py-3 bg-gray-700 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-              placeholder={placeholder}
-              required
-            />
+            {isFetching ? (
+              renderSkeleton()
+            ) : (
+              <>
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <i className={`fas fa-${icon} text-gray-500`} />
+                </div>
+                <input
+                  type="text"
+                  id={name}
+                  name={name}
+                  value={formData[name] || ""}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-3 py-3 bg-gray-700 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                  placeholder={placeholder}
+                  required
+                />
+              </>
+            )}
           </div>
         </div>
       ))}
@@ -70,19 +81,25 @@ export default function AddressForm({
               {label}
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i className={`fas fa-${icon} text-gray-500`} />
-              </div>
-              <input
-                type="text"
-                id={name}
-                name={name}
-                value={formData[name] || ""}
-                onChange={handleChange}
-                className="w-full pl-10 pr-3 py-3 bg-gray-700 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                placeholder={placeholder}
-                required
-              />
+              {isFetching ? (
+                renderSkeleton()
+              ) : (
+                <>
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i className={`fas fa-${icon} text-gray-500`} />
+                  </div>
+                  <input
+                    type="text"
+                    id={name}
+                    name={name}
+                    value={formData[name] || ""}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-3 py-3 bg-gray-700 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                    placeholder={placeholder}
+                    required
+                  />
+                </>
+              )}
             </div>
           </div>
         ))}
@@ -110,19 +127,25 @@ export default function AddressForm({
               {label}
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i className={`fas fa-${icon} text-gray-500`} />
-              </div>
-              <input
-                type="text"
-                id={name}
-                name={name}
-                value={formData[name] || ""}
-                onChange={handleChange}
-                className="w-full pl-10 pr-3 py-3 bg-gray-700 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                placeholder={placeholder}
-                required
-              />
+              {isFetching ? (
+                renderSkeleton()
+              ) : (
+                <>
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i className={`fas fa-${icon} text-gray-500`} />
+                  </div>
+                  <input
+                    type="text"
+                    id={name}
+                    name={name}
+                    value={formData[name] || ""}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-3 py-3 bg-gray-700 bg-opacity-50 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                    placeholder={placeholder}
+                    required
+                  />
+                </>
+              )}
             </div>
           </div>
         ))}

@@ -149,6 +149,7 @@ export default function AddressEdit() {
                 onSubmit={handleSubmit}
                 isEdit
                 isLoading={isLoading}
+                isFetching={isFetching}
               />
             </>
           )}
