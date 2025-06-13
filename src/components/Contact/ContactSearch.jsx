@@ -29,17 +29,15 @@ export default function ContactSearchForm({
           <i className="fas fa-search text-blue-400 mr-3" />
           <h2 className="text-xl font-semibold text-white">Search Contacts</h2>
         </div>
-        <button
+        <Button
           type="button"
+          icon={isOpen ? "fa-chevron-up" : "fa-chevron-down"}
+          color="gray"
           onClick={() => setIsOpen((prev) => !prev)}
-          className="text-gray-300 hover:text-white hover:bg-gray-700 p-2 rounded-full focus:outline-none transition-all duration-200"
+          className="p-2 rounded-full text-lg"
         >
-          <i
-            className={`fas ${
-              isOpen ? "fa-chevron-up" : "fa-chevron-down"
-            } text-lg`}
-          />
-        </button>
+          {" "}
+        </Button>
       </div>
 
       <div
