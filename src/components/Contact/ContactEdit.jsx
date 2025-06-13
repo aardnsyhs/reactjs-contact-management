@@ -11,10 +11,10 @@ export default function ContactEdit() {
   const [formData, setFormData] = useState({});
   const currentData = useRef({});
   const [isLoading, setIsLoading] = useState(false);
-  const [isFething, setIsFething] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
   async function fetchContact() {
-    setIsFething(true);
+    setIsFetching(true);
 
     try {
       const response = await contactDetail(token, id);
@@ -34,7 +34,7 @@ export default function ContactEdit() {
         await alertError("Something went wrong. Please try again.");
       }
     } finally {
-      setIsFething(false);
+      setIsFetching(false);
     }
   }
 
@@ -110,7 +110,7 @@ export default function ContactEdit() {
             onSubmit={handleSubmit}
             isEdit
             isLoading={isLoading}
-            isFething={isFething}
+            isFetching={isFetching}
           />
         </div>
       </div>

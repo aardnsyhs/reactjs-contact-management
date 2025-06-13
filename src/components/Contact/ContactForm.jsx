@@ -6,7 +6,7 @@ export default function ContactForm({
   onSubmit,
   isEdit = false,
   isLoading = false,
-  isFething = false,
+  isFetching = false,
 }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +26,7 @@ export default function ContactForm({
               {field.replace("_", " ").replace(/\b\w/g, (c) => c.toUpperCase())}
             </label>
             <div className="relative">
-              {isFething ? (
+              {isFetching ? (
                 renderSkeleton()
               ) : (
                 <>
@@ -54,7 +54,7 @@ export default function ContactForm({
             {field.charAt(0).toUpperCase() + field.slice(1)}
           </label>
           <div className="relative">
-            {isFething ? (
+            {isFetching ? (
               renderSkeleton()
             ) : (
               <>
@@ -79,7 +79,7 @@ export default function ContactForm({
           </div>
         </div>
       ))}
-      {!isFething && (
+      {!isFetching && (
         <div className="flex justify-end space-x-4 mt-6">
           <Link
             to="/dashboard/contacts"

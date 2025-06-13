@@ -16,10 +16,10 @@ export default function AddressCreate() {
   const [contact, setContact] = useState({});
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [isFething, setIsFething] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
   async function fetchContact() {
-    setIsFething(true);
+    setIsFetching(true);
 
     try {
       const response = await contactDetail(token, id);
@@ -38,7 +38,7 @@ export default function AddressCreate() {
         await alertError("Something went wrong. Please try again.");
       }
     } finally {
-      setIsFething(false);
+      setIsFetching(false);
     }
   }
 
@@ -90,7 +90,7 @@ export default function AddressCreate() {
       </div>
       <div className="bg-gray-800 bg-opacity-80 rounded-xl shadow-custom border border-gray-700 overflow-hidden max-w-2xl mx-auto animate-fade-in">
         <div className="p-8">
-          {isFething ? (
+          {isFetching ? (
             <>
               <AddressHeaderSkeleton />
               <AddressFormSkeleton />
