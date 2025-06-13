@@ -1,18 +1,15 @@
-import { useEffect, useState } from "react";
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useLocation } from "react-router";
 import { useLocalStorage } from "react-use";
-import LoadingScreen from "../components/LoadingScreen";
 
 export default function GuestRoute() {
   const [token] = useLocalStorage("token", "");
-  const [checking, isChecking] = useState(true);
+  const location = useLocation();
 
-  useEffect(() => {
-    const timer = setTimeout(() => isChecking(false), 300);
-    return () => clearTimeout(timer);
-  });
+  if (token) {
+    return (
+      <Navigate to="/dashboard/contacts" replace state={{ from: location }} />
+    );
+  }
 
-  if (checking) return <LoadingScreen />;
-
-  return token ? <Navigate to="/dashboard/contacts" replace /> : <Outlet />;
+  return <Outlet />;
 }

@@ -3,15 +3,19 @@ import { useLocalStorage } from "react-use";
 import { userLogin } from "../lib/api/UserApi";
 import { Link, useNavigate } from "react-router";
 import { alertError } from "../lib/alert";
+import LoadingScreen from "../LoadingScreen";
 
 export default function UserLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [_, setToken] = useLocalStorage("token", "");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingRedirect, setIsLoadingRedirect] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await userLogin({ username, password });
@@ -19,9 +23,10 @@ export default function UserLogin() {
       if (response.status === 200) {
         const token = response.data.data.token;
         setToken(token);
-        navigate({
-          pathname: "/dashboard/contacts",
-        });
+        setIsLoadingRedirect(true);
+        setTimeout(() => {
+          navigate("/dashboard/contacts");
+        }, 400);
       } else {
         await alertError(response.data.errors);
       }
@@ -32,9 +37,12 @@ export default function UserLogin() {
       } else {
         await alertError("Something went wrong. Please try again.");
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
+  if (isLoadingRedirect) return <LoadingScreen />;
   return (
     <div className="animate-fade-in bg-gray-800 bg-opacity-80 p-8 rounded-xl shadow-custom border border-gray-700 backdrop-blur-sm w-full max-w-md">
       <div className="text-center mb-8">
@@ -94,9 +102,24 @@ export default function UserLogin() {
         <div className="mb-6">
           <button
             type="submit"
-            className="w-full bg-gradient text-white py-3 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform hover:-translate-y-0.5"
+            disabled={isLoading}
+            className={`w-full bg-gradient text-white py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform ${
+              isLoading
+                ? "opacity-60 cursor-not-allowed"
+                : "hover:opacity-90 hover:-translate-y-0.5"
+            }`}
           >
-            <i className="fas fa-sign-in-alt mr-2" /> Sign In
+            {isLoading ? (
+              <>
+                <i className="fas fa-spinner fa-spin mr-2" />
+                Signing...
+              </>
+            ) : (
+              <>
+                <i className="fas fa-sign-in-alt mr-2" />
+                Sign In
+              </>
+            )}
           </button>
         </div>
         <div className="text-center text-sm text-gray-400">
@@ -105,7 +128,7 @@ export default function UserLogin() {
             to="/register"
             className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
           >
-            Sign up
+            Sign Up
           </Link>
         </div>
       </form>

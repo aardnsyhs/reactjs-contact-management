@@ -14,7 +14,7 @@ export default function IndexRedirect() {
       } else {
         navigate("/login");
       }
-    }, 500);
+    }, 400);
 
     return () => clearTimeout(timer);
   }, [token, navigate]);

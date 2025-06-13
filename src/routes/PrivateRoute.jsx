@@ -1,18 +1,13 @@
-import { useEffect, useState } from "react";
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useLocation } from "react-router";
 import { useLocalStorage } from "react-use";
-import LoadingScreen from "../components/LoadingScreen";
 
 export default function PrivateRoute() {
   const [token] = useLocalStorage("token", "");
-  const [checking, setChecking] = useState(true);
+  const location = useLocation();
 
-  useEffect(() => {
-    const timer = setTimeout(() => setChecking(false), 300);
-    return () => clearTimeout(timer);
-  }, []);
+  if (!token) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
 
-  if (checking) return <LoadingScreen />;
-
-  return token ? <Outlet /> : <Navigate to="/login" replace />;
+  return <Outlet />;
 }
