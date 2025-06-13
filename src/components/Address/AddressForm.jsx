@@ -1,4 +1,5 @@
-import { Link, useParams } from "react-router";
+import { useParams } from "react-router";
+import Button from "../Button";
 
 export default function AddressForm({
   formData,
@@ -151,12 +152,14 @@ export default function AddressForm({
         ))}
       </div>
       <div className="flex justify-end space-x-4">
-        <Link
+        <Button
+          type="link"
           to={`/dashboard/contacts/${id}`}
-          className="px-5 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 flex items-center shadow-md"
+          icon="fa-times"
+          color="gray"
         >
-          <i className="fas fa-times mr-2" /> Cancel
-        </Link>
+          Cancel
+        </Button>
         <button
           type="submit"
           disabled={isLoading}

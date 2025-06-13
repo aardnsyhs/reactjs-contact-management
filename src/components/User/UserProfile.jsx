@@ -6,6 +6,7 @@ import {
   userUpdateProfile,
 } from "../lib/api/UserApi";
 import { alertError, alertSuccess } from "../lib/alert";
+import Button from "../Button";
 
 export default function UserProfile() {
   const [name, setName] = useState("");
@@ -226,12 +227,20 @@ export default function UserProfile() {
                 </div>
               </div>
               <div className="mt-6">
-                <button
+                <Button
+                  type="submit"
+                  icon="fa-key"
+                  color="gradient"
+                  className="w-full"
+                >
+                  Update Password
+                </Button>
+                {/* <button
                   type="submit"
                   className="w-full bg-gradient text-white py-3 px-4 rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center"
                 >
                   <i className="fas fa-key mr-2" /> Update Password
-                </button>
+                </button> */}
               </div>
             </form>
           </div>

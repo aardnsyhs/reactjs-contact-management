@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import Button from "../Button";
 
 export default function ContactSearchForm({
   name,
@@ -103,12 +104,9 @@ export default function ContactSearchForm({
             ))}
           </div>
           <div className="mt-5 text-right">
-            <button
-              type="submit"
-              className="px-5 py-3 bg-gradient text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 font-medium shadow-lg transform hover:-translate-y-0.5"
-            >
-              <i className="fas fa-search mr-2" /> Search
-            </button>
+            <Button type="submit" icon="fa-search" color="gradient">
+              Search
+            </Button>
           </div>
         </form>
       </div>

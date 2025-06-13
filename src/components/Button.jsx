@@ -7,18 +7,35 @@ export default function Button({
   icon,
   children,
   color = "blue",
+  className = "",
 }) {
-  const colorClass =
-    color === "gradient"
-      ? "bg-gradient"
-      : color === "red"
-      ? "bg-gradient-to-r from-red-600 to-red-500"
-      : "bg-blue-600";
-  const baseClass = `px-4 py-2 ${colorClass} text-white rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 ${
-    color === "red"
-      ? "focus:ring-red-500 focus:ring-offset-red-800"
-      : "focus:ring-blue-500 focus:ring-offset-gray-800"
-  } transition-all duration-200 font-medium shadow-md flex items-center`;
+  let colorClass = "";
+  let focusClass = "";
+
+  switch (color) {
+    case "red":
+      colorClass = "bg-gradient-to-r from-red-600 to-red-500";
+      focusClass =
+        "focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-800";
+      break;
+    case "gray":
+      colorClass = "bg-gray-700 hover:bg-gray-600";
+      focusClass =
+        "focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800";
+      break;
+    case "gradient":
+      colorClass = "bg-gradient";
+      focusClass =
+        "focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800";
+      break;
+    default:
+      colorClass = "bg-blue-600";
+      focusClass =
+        "focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800";
+      break;
+  }
+
+  const baseClass = `px-4 py-2 ${colorClass} text-white rounded-lg hover:opacity-90 focus:outline-none ${focusClass} transition-all duration-200 font-medium shadow-md flex items-center justify-center ${className}`;
 
   if (type === "link") {
     return (
