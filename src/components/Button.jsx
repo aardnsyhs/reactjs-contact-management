@@ -47,9 +47,7 @@ export default function Button({
     : `fas ${icon || (isEdit ? "fa-save" : "fa-plus-circle")} mr-2`;
 
   const label = isLoading
-    ? isEdit
-      ? "Updating..."
-      : "Saving..."
+    ? children
     : children || (isEdit ? "Update" : "Create");
 
   if (type === "link") {
