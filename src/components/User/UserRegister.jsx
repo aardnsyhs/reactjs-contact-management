@@ -18,6 +18,7 @@ export default function UserRegister() {
 
     if (password !== confirmPassword) {
       await alertError("Passwords do not match");
+      setIsLoading(false);
       return;
     }
 
