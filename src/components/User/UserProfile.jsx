@@ -43,9 +43,11 @@ export default function UserProfile() {
 
   async function handleSubmitProfile(e) {
     e.preventDefault();
+    setIsLoading(true);
 
     if (name.trim() === currentName.current.trim()) {
       await alertError("Name is the same as before. No changes detected.");
+      setIsLoading(false);
       return;
     }
 
@@ -66,14 +68,18 @@ export default function UserProfile() {
       } else {
         await alertError("Something went wrong. Please try again.");
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
   async function handleSubmitPassword(e) {
     e.preventDefault();
+    setIsLoading(true);
 
     if (password !== confirmPassword) {
       alertError("Password do not match");
+      setIsLoading(false);
       return;
     }
 
@@ -95,6 +101,8 @@ export default function UserProfile() {
       } else {
         await alertError("Something went wrong. Please try again.");
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
